@@ -1,10 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import productRouter from './routes/productRouter.js';
-import userRouter from './routes/userRouter.js';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
-import orderRouter from './routes/orderRouter.js';
+
+dotenv.config();
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(
         if(tokenString != null){
             const token = tokenString.replace("Bearer ", "") 
 
-            jwt.verify(token,"cbc-batch-five#@202575",
+            jwt.verify(token,process.env.JWT_KEY,
                 (err,decoded)=>{
                     if(decoded != null){
                         req.user = decoded
@@ -36,21 +36,18 @@ app.use(
     }
 )
 
-mongoose.connect("mongodb+srv://kavindaappuhamy:kavindamongo98@cluster0.hkhcevt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect(process.env.MONGODB_URL)
 .then(()=>{
     console.log("Connected to database");
 }).catch(() => {
     console.log("Database connection failed");
 })
 
-app.use("/products", productRouter)
-app.use("/users", userRouter)
-app.use("/orders", orderRouter)
 
-app.listen(3000, 
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT,
     () => {
-        console.log('Server is running on port 3000');
+        console.log('Server is running on port ${PORT}');
     }
 );
-
-//mongodb+srv://kavindaappuhamy:kavindamongo98@cluster0.hkhcevt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
