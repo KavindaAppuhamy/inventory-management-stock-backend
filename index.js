@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import stockRouter from './routes/stockRoutes.js';
 
 dotenv.config();
 
@@ -43,6 +44,8 @@ mongoose.connect(process.env.MONGODB_URL)
     console.log("Database connection failed");
 })
 
+// Routes
+app.use('/api/stocks', stockRouter);
 
 const PORT = process.env.PORT || 5000;
 
