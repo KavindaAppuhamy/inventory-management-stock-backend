@@ -11,32 +11,6 @@ const app = express();
 
 app.use(bodyParser.json())
 
-app.use(
-    (req,res,next)=>{
-        const tokenString = req.header("Authorization")
-        if(tokenString != null){
-            const token = tokenString.replace("Bearer ", "") 
-
-            jwt.verify(token,process.env.JWT_KEY,
-                (err,decoded)=>{
-                    if(decoded != null){
-                        req.user = decoded
-                        next()
-                    }
-                    else{
-                        console.log("invalid token")
-                        res.status(403).json({
-                            message : "Invalid token"
-                        })
-                    }
-                }
-            )
-        }else{
-            next()          
-        }
-    }
-)
-
 mongoose.connect(process.env.MONGODB_URL)
 .then(()=>{
     console.log("Connected to database");
