@@ -41,11 +41,6 @@ const stockSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    reorderLevel: {
-        type: Number,
-        required: true,
-        min: 0
-    },
     description: {
         type: String,
         trim: true
